@@ -355,6 +355,114 @@
   display:flex; align-items:center; justify-content:center; color:#b98d9d; font-size:12px;
 }
 .polaroid-cap{ margin-top:10px; text-align:center; color:#5a4048; font-style: italic; font-size:13px; }
+
+  /* ===== INTERACTIVE PHOTO MEMORIES ===== */
+
+.polaroid {
+  cursor: pointer;
+  position: relative;
+  transition:
+    transform 0.45s cubic-bezier(.2,.8,.2,1),
+    box-shadow 0.45s ease,
+    filter 0.45s ease;
+  will-change: transform;
+}
+
+.polaroid:hover {
+  transform: translateY(-8px) rotate(var(--r, -1.5deg)) scale(1.02);
+  box-shadow: 0 20px 35px rgba(0,0,0,.5);
+}
+
+.polaroid.memory-active {
+  transform: translateY(-10px) scale(1.08) rotate(0deg) !important;
+  box-shadow:
+    0 0 0 3px rgba(255,182,210,.45),
+    0 0 35px rgba(255,105,180,.65),
+    0 30px 60px rgba(0,0,0,.6);
+  z-index: 100;
+}
+
+.polaroid-stack.memory-open .polaroid:not(.memory-active) {
+  filter: brightness(.45) blur(1px);
+  transform: scale(.96);
+}
+
+/* Floating hearts */
+.memory-heart {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  pointer-events: none;
+  font-size: 18px;
+  opacity: 0;
+  z-index: 200;
+  animation: memoryHeartFloat 1.4s ease-out forwards;
+}
+
+@keyframes memoryHeartFloat {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.4);
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform:
+      translate(
+        calc(-50% + var(--heart-x)),
+        calc(-50% - 90px)
+      )
+      scale(1.2)
+      rotate(var(--heart-r));
+  }
+}
+
+/* Small message under selected photo */
+.memory-message {
+  position: absolute;
+  left: 50%;
+  bottom: -52px;
+  transform: translateX(-50%) translateY(10px);
+  width: max-content;
+  max-width: 240px;
+  padding: 9px 15px;
+  border-radius: 20px;
+
+  background: rgba(91, 35, 62, .95);
+  border: 1px solid rgba(255,182,210,.4);
+  color: #ffe8f0;
+
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: .35s ease;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.polaroid.memory-active .memory-message {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 480px) {
+  .polaroid.memory-active {
+    transform: scale(1.05) rotate(0deg) !important;
+  }
+
+  .memory-message {
+    bottom: -48px;
+    font-size: 11px;
+    max-width: 180px;
+  }
+}
   
   /* playlist */
   .player-card{
@@ -774,11 +882,87 @@ function buildBouquet(){
 function buildPolaroids(){
   const stack = document.getElementById('polaroidStack');
   if(stack.childElementCount) return;
-  CONFIG.photos.forEach(p=>{
+
+  CONFIG.photos.forEach((p, index) => {
+
     const card = document.createElement('div');
     card.className = 'polaroid';
-    card.innerHTML = `<div class="polaroid-photo" style="background:${p.bg}">${p.imgHint || ''}</div><div class="polaroid-cap">${p.caption}</div>`;
+
+    card.innerHTML = `
+      <div class="polaroid-photo"
+           style="background:${p.bg}">
+        ${p.imgHint || ''}
+      </div>
+
+      <div class="polaroid-cap">
+        ${p.caption}
+      </div>
+
+      <div class="memory-message">
+        ${p.message || "A beautiful memory with you. 💕"}
+      </div>
+    `;
+
+    card.addEventListener('click', function(e){
+
+      e.stopPropagation();
+
+      const alreadyActive = card.classList.contains('memory-active');
+
+      // Close all other photos
+      document.querySelectorAll('.polaroid').forEach(other => {
+        other.classList.remove('memory-active');
+      });
+
+      stack.classList.remove('memory-open');
+
+      // If it wasn't already selected, open it
+      if(!alreadyActive){
+
+        card.classList.add('memory-active');
+        stack.classList.add('memory-open');
+
+        // Create floating hearts
+        const hearts = ['💗','💕','💖','💓','✨'];
+
+        for(let i = 0; i < 7; i++){
+
+          const heart = document.createElement('span');
+
+          heart.className = 'memory-heart';
+          heart.textContent =
+            hearts[Math.floor(Math.random() * hearts.length)];
+
+          heart.style.setProperty(
+            '--heart-x',
+            `${(Math.random() - 0.5) * 140}px`
+          );
+
+          heart.style.setProperty(
+            '--heart-r',
+            `${(Math.random() - 0.5) * 40}deg`
+          );
+
+          heart.style.animationDelay =
+            `${Math.random() * 0.25}s`;
+
+          card.appendChild(heart);
+
+          setTimeout(() => heart.remove(), 1800);
+        }
+      }
+    });
+
     stack.appendChild(card);
+  });
+
+  // Clicking outside closes the selected photo
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.polaroid').forEach(card => {
+      card.classList.remove('memory-active');
+    });
+
+    stack.classList.remove('memory-open');
   });
 }
 
