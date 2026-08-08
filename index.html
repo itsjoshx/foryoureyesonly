@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>For You</title>
+<title>Happy Birthday</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Dancing+Script:wght@600;700&display=swap');
 
@@ -143,6 +143,7 @@
     backdrop-filter: blur(6px);
     box-shadow: 0 30px 60px rgba(0,0,0,.4);
   }
+  .lock-card .bloom{ margin-bottom: 18px; }
   .lock-title{ font-family: var(--serif); font-size: 30px; font-weight:600; margin: 6px 0 4px; }
   .lock-sub{ color: var(--text-muted); font-size:15px; margin-bottom: 22px; letter-spacing:.03em; }
   .dots{ display:flex; justify-content:center; gap:12px; margin-bottom: 30px; }
@@ -566,7 +567,7 @@
    PERSONALIZE ME — edit this config to make it yours
    ============================================================ */
 const CONFIG = {
-  recipientName: "Babsl",
+  recipientName: "Babs",
   specialDateLabel: "August 21",       // shown on hero + letter
   passcode: "042121",                 // digits the recipient must enter (numeric keypad)
   letterGreeting: "My dearest,",
@@ -617,6 +618,7 @@ document.getElementById('letterDate').textContent = CONFIG.specialDateLabel;
 document.getElementById('letterGreet').textContent = CONFIG.letterGreeting;
 document.getElementById('closingBody').textContent = CONFIG.closingMessage;
 document.getElementById('modalSub').textContent = "The most special " + CONFIG.recipientName.split(' ')[0];
+document.title = "Happy Birthday, " + CONFIG.recipientName.split(' ')[0] + "!";
 
 // ---- screen flow control ----
 const screens = {
