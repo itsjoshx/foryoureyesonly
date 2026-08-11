@@ -41,16 +41,6 @@
     overflow-x:hidden;
     -webkit-tap-highlight-color: transparent;
   }
-    @media (max-width: 420px){
-    .bouquet-image-field{
-      width:92vw;
-      max-width:360px;
-      height:235px;
-    }
-    .bouquet-reference{
-      top:140px;
-    }
-  }
 
 @media (prefers-reduced-motion: reduce){
     *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
@@ -315,6 +305,16 @@
   .bouquet-image-field .flower-btn{
     position:relative;
     z-index:4;
+  }
+  
+  @media (max-width: 420px){
+    .bouquet-image-field{
+      width: min(84vw, 360px);
+      height: 235px;
+    }
+    .bouquet-reference{
+      top: 140px;
+    }
   }
 
   /* letter */
