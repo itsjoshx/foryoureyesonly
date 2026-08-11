@@ -849,11 +849,11 @@ function buildBouquet(){
   // glyph + position (as % of field, matching the reference arrangement) per message
   const layout = [
     { glyph:'🌺', size:32, l:'24.7%', t:'26.8%' }, // pink hibiscus, upper-left
-    { glyph:'💮', size:20, l:'47%', t:'40%'  }, // small accent flower
-    { glyph:'🌸', size:30, l:'47.4%', t:'16.4%' }, // cosmos, top-center
+    { glyph:'💮', size:20, l:'50%', t:'40%'  }, // small accent flower
+    { glyph:'🌸', size:30, l:'50%', t:'16.4%' }, // cosmos, top-center
     { glyph:'🌷', size:32, l:'70.4%', t:'25.4%' }, // tulip, upper-right
     { glyph:'🌼', size:32, l:'16.9%', t:'50.2%' }, // daisy, lower-left
-    { glyph:'🌹', size:32, l:'77.5%', t:'46.6%' }  // rose, lower-right
+    { glyph:'🌹', size:32, l:'77.5%', t:'50.2%' }  // rose, lower-right
   ];
   CONFIG.bouquetMessages.slice(0, layout.length).forEach((msg, i)=>{
     const spec = layout[i];
