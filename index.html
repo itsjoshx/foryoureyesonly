@@ -537,6 +537,7 @@
     border:1px solid rgba(230,164,184,.4); color: var(--rose); font-size:18px;
     display:flex; align-items:center; justify-content:center; cursor:pointer;
   }
+    .sound-fab.muted{ opacity:.55; background: rgba(230,164,184,.06); }
 
   ::selection{ background: var(--rose); color:#2a0f1d; }
 </style>
@@ -1032,10 +1033,12 @@ document.getElementById('modalCloseBtn').onclick = ()=>{
   document.getElementById('modalOverlay').classList.add('hidden');
 };
 
-// ---- decorative sound fab (visual only placeholder) ----
+// ---- sound fab: real mute/unmute toggle for the playlist audio ----
 document.getElementById('soundFab').onclick = function(){
-  this.classList.toggle('opened');
-  this.style.opacity = this.classList.contains('opened') ? '0.5' : '1';
+  audio.muted = !audio.muted;
+  this.classList.toggle('muted', audio.muted);
+  this.textContent = audio.muted ? '🔇' : '♪';
+  this.title = audio.muted ? 'Unmute' : 'Mute';
 };
 </script>
 </body>
