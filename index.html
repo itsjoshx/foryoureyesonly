@@ -1009,18 +1009,17 @@ function loadTrack(i, autoplay){
   });
 
   if(t.src){
+    audio.pause();
     audio.src = t.src;
-    audio.load();
+    audio.currentTime = 0;
 
     if(autoplay){
-      audio.addEventListener('canplay', function startOnce(){
-        audio.removeEventListener('canplay', startOnce);
-        playTrack();
-      }, { once:true });
+      playTrack();
     }
   } else {
     audio.removeAttribute('src');
     audio.load();
+    pauseTrack();
   }
 
   if(!autoplay) pauseTrack();
