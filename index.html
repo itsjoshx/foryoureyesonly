@@ -665,7 +665,7 @@
         </div>
       </div>
       <div class="track-list" id="trackList"></div>
-      <audio id="audio" preload="none"></audio>
+      <audio id="audio" preload="auto"></audio>
     </div>
 
     <!-- Closing -->
@@ -1000,11 +1000,30 @@ function buildTracks(){
 function loadTrack(i, autoplay){
   trackIndex = i;
   const t = CONFIG.tracks[i];
+
   document.getElementById('trackTitle').textContent = t.title;
   document.getElementById('trackArtist').textContent = t.artist;
-  document.querySelectorAll('.track-row').forEach((r,idx)=> r.classList.toggle('active', idx===i));
-  if(t.src){ audio.src = t.src; } else { audio.removeAttribute('src'); audio.load(); }
-  if(autoplay) playTrack(); else pauseTrack();
+
+  document.querySelectorAll('.track-row').forEach((r,idx)=>{
+    r.classList.toggle('active', idx===i);
+  });
+
+  if(t.src){
+    audio.src = t.src;
+    audio.load();
+
+    if(autoplay){
+      audio.addEventListener('canplay', function startOnce(){
+        audio.removeEventListener('canplay', startOnce);
+        playTrack();
+      }, { once:true });
+    }
+  } else {
+    audio.removeAttribute('src');
+    audio.load();
+  }
+
+  if(!autoplay) pauseTrack();
 }
 const bgVideo = document.getElementById('playerBgVideo');
 function playTrack(){
