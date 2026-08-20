@@ -650,7 +650,7 @@
       <h2 class="section-title">Special Playlist</h2>
       <p class="section-sub">Songs that always remind me of you</p>
       <div class="player-card">
-        <video class="player-bg-video" id="playerBgVideo" src="timelapse.mp4" muted loop playsinline></video>
+        <video class="player-bg-video" id="playerBgVideo" muted playsinline></video>
         <div class="player-bg-overlay"></div>
         <div class="disc hidden" id="disc"><div class="disc-hole"></div></div>
         <div class="track-title" id="trackTitle">Track One</div>
@@ -697,6 +697,10 @@
    ============================================================ */
 const CONFIG = {
   recipientName: "Babsss",
+  bgVideos: [
+    "timelapse.mp4",
+    "timelapse2.mp4"
+  ],
   specialDateLabel: "August 21",       // shown on hero + letter
   passcode: "0821",                 // digits the recipient must enter (numeric keypad)
   letterGreeting: "My dearest Anggg,",
@@ -1005,6 +1009,18 @@ function loadTrack(i, autoplay){
   if(autoplay) playTrack(); else pauseTrack();
 }
 const bgVideo = document.getElementById('playerBgVideo');
+let bgVideoIndex = 0;
+
+function loadBgVideo(i){
+  bgVideoIndex = i % CONFIG.bgVideos.length;
+  bgVideo.src = CONFIG.bgVideos[bgVideoIndex];
+  bgVideo.load();
+}
+bgVideo.addEventListener('ended', ()=>{
+  loadBgVideo(bgVideoIndex + 1);
+  bgVideo.play().catch(()=>{});
+});
+loadBgVideo(0);
 function playTrack(){
   playing = true;
   document.getElementById('playBtn').textContent = '⏸';
