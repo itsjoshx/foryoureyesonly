@@ -1043,6 +1043,9 @@ function pauseTrack(){
 document.getElementById('playBtn').onclick = ()=> playing ? pauseTrack() : playTrack();
 document.getElementById('nextBtn').onclick = ()=> loadTrack((trackIndex+1) % CONFIG.tracks.length, playing);
 document.getElementById('prevBtn').onclick = ()=> loadTrack((trackIndex-1+CONFIG.tracks.length) % CONFIG.tracks.length, playing);
+audio.addEventListener('ended', ()=>{
+  loadTrack((trackIndex + 1) % CONFIG.tracks.length, true);
+});
 audio.addEventListener('timeupdate', ()=>{
   if(!audio.duration) return;
   document.getElementById('seekFill').style.width = (audio.currentTime/audio.duration*100)+'%';
